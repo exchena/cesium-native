@@ -3,6 +3,7 @@
 #include <Cesium3DTilesSelection/Library.h>
 #include <CesiumAsync/IAssetAccessor.h>
 #include <CesiumGeospatial/Ellipsoid.h>
+#include <CesiumGeospatial/GlobeRectangle.h>
 #include <CesiumGltf/Ktx2TranscodeTargets.h>
 
 #include <any>
@@ -287,6 +288,7 @@ struct CESIUM3DTILESSELECTION_API TilesetOptions {
    * render list while the tile is fading in. If this is false, the tile
    * currently fading in will pop in to full opacity if descendants are
    * rendered (this counteracts the benefits of LOD transition blending).
+   *
    */
   bool kickDescendantsWhileFadingIn = true;
 
@@ -335,6 +337,19 @@ struct CESIUM3DTILESSELECTION_API TilesetOptions {
    * @brief HTTP headers to attach to requests made for this tileset.
    */
   std::vector<CesiumAsync::IAssetAccessor::THeader> requestHeaders;
+
+  /// <summary>
+  /// "根据摄像机到渲染块的距离，放大Maximum Screen Space Error."
+  /// "值越小，相同距离放大的倍数越大"
+  /// </para>
+  /// </summary>
+  double screenSpaceErrorDistancePer = 50;
+
+  /// <summary>
+  /// 过滤范围设定
+  /// </para>
+  /// </summary>
+  std::list<CesiumGeospatial::GlobeRectangle> filterRectange;
 };
 
 } // namespace Cesium3DTilesSelection

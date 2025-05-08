@@ -368,12 +368,18 @@ std::vector<CesiumGeospatial::Projection> mapOverlaysToTile(
 
   const CesiumGeospatial::Ellipsoid& ellipsoid = tilesetOptions.ellipsoid;
 
+  double maximumScreenSpaceError = tilesetOptions.maximumScreenSpaceError;
+  double tileShowPer = tile.getTileShowPer();
+  if (tileShowPer > 1) {
+    maximumScreenSpaceError *= tileShowPer;
+  }
+
   for (size_t i = 0; i < tileProviders.size() && i < placeholders.size(); ++i) {
     RasterOverlayTileProvider& tileProvider = *tileProviders[i];
     RasterOverlayTileProvider& placeholder = *placeholders[i];
 
     RasterMappedTo3DTile* pMapped = RasterMappedTo3DTile::mapOverlayToTile(
-        tilesetOptions.maximumScreenSpaceError,
+        maximumScreenSpaceError,
         tileProvider,
         placeholder,
         tile,
@@ -1865,6 +1871,13 @@ void TilesetContentManager::updateDoneState(
     bool skippedUnknown = false;
     std::vector<RasterMappedTo3DTile>& rasterTiles =
         tile.getMappedRasterTiles();
+
+    double maximumScreenSpaceError = tilesetOptions.maximumScreenSpaceError;
+    double tileShowPer = tile.getTileShowPer();
+    if (tileShowPer > 1) {
+      maximumScreenSpaceError *= tileShowPer;
+    }
+
     for (size_t i = 0; i < rasterTiles.size(); ++i) {
       RasterMappedTo3DTile& mappedRasterTile = rasterTiles[i];
 
@@ -1890,7 +1903,7 @@ void TilesetContentManager::updateDoneState(
           // Add a new mapping.
           std::vector<CesiumGeospatial::Projection> missingProjections;
           RasterMappedTo3DTile::mapOverlayToTile(
-              tilesetOptions.maximumScreenSpaceError,
+              maximumScreenSpaceError,
               *pProvider,
               *pPlaceholder,
               tile,

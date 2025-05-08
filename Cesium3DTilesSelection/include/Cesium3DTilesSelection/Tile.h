@@ -604,6 +604,22 @@ public:
    */
   bool hasReferencingContent() const noexcept;
 
+  void setTileToCameraDistance(double distance) noexcept {
+    this->_distance = distance;
+  }
+
+  void
+  setScreenSpaceErrorDistancePer(double screenSpaceErrorDistancePer) noexcept {
+    this->_screenSpaceErrorDistancePer = screenSpaceErrorDistancePer;
+  }
+
+  double getTileToCameraDistance() noexcept { return this->_distance; }
+
+  /**
+   * 获取Tile显示百分比
+   */
+  double getTileShowPer() const noexcept;
+
 private:
   struct TileConstructorImpl {};
   template <
@@ -668,6 +684,12 @@ private:
 
   friend class TilesetContentManager;
   friend class MockTilesetContentManagerTestFixture;
+
+  // 距离摄像机的距离
+  double _distance;
+
+  // 一定距离范围内显示百分比
+  double _screenSpaceErrorDistancePer;
 
 public:
   /**

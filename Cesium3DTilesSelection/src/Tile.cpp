@@ -451,4 +451,24 @@ bool Tile::hasReferencingContent() const noexcept {
          TileIdUtilities::isLoadable(this->_id);
 }
 
+double Tile::getTileShowPer() const noexcept {
+  double per = 0;
+  if (this->_screenSpaceErrorDistancePer > 1)
+  {
+    per = this->_distance / this->_screenSpaceErrorDistancePer;
+  }
+  
+  /*if (per < 0)
+  {
+    per = -per;
+  }
+
+  if (per > 100)
+  {
+    per = 100;
+  }*/
+
+  return per;
+}
+
 } // namespace Cesium3DTilesSelection

@@ -3,11 +3,14 @@
 #include <CesiumAsync/AsyncSystem.h>
 #include <CesiumAsync/IAssetAccessor.h>
 #include <CesiumGeospatial/Ellipsoid.h>
+#include <CesiumGeospatial/GlobeRectangle.h>
 #include <CesiumGltf/Ktx2TranscodeTargets.h>
 #include <CesiumRasterOverlays/Library.h>
 #include <CesiumRasterOverlays/RasterOverlayLoadFailureDetails.h>
 #include <CesiumUtility/IntrusivePointer.h>
 #include <CesiumUtility/ReferenceCounted.h>
+
+
 
 #include <nonstd/expected.hpp>
 #include <spdlog/fwd.h>
@@ -113,6 +116,19 @@ struct CESIUMRASTEROVERLAYS_API RasterOverlayOptions {
    * @brief The ellipsoid used for this raster overlay.
    */
   CesiumGeospatial::Ellipsoid ellipsoid = CesiumGeospatial::Ellipsoid::WGS84;
+
+  /// <summary>
+  /// "根据摄像机到渲染块的距离，放大Maximum Screen Space Error."
+  /// "值越小，相同距离放大的倍数越大"
+  /// </para>
+  /// </summary>
+  double screenSpaceErrorDistancePer = 50;
+
+  /// <summary>
+  /// 过滤范围设定
+  /// </para>
+  /// </summary>
+  std::list<CesiumGeospatial::GlobeRectangle> filterRectange;
 };
 
 /**

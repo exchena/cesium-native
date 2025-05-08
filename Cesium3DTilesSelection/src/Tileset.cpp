@@ -893,9 +893,15 @@ bool Tileset::_meetsSse(
     }
   }
 
+  double maximumScreenSpaceError = this->_options.maximumScreenSpaceError;
+  double tileShowPer = tile.getTileShowPer();
+  if (tileShowPer > 1) {
+    maximumScreenSpaceError *= tileShowPer;
+  }
+
   return culled ? !this->_options.enforceCulledScreenSpaceError ||
                       largestSse < this->_options.culledScreenSpaceError
-                : largestSse < this->_options.maximumScreenSpaceError;
+                : largestSse < maximumScreenSpaceError;
 }
 
 // Visits a tile for possible rendering. When we call this function with a tile:
@@ -917,6 +923,13 @@ Tileset::TraversalDetails Tileset::_visitTileIfNeeded(
 
   std::vector<double>& distances = this->_distances;
   computeDistances(tile, frameState.frustums, distances);
+
+  // 这里假设只有一个摄像机
+  if (distances.size() > 0) {
+    tile.setTileToCameraDistance(distances[0]);
+    tile.setScreenSpaceErrorDistancePer(this->_options.screenSpaceErrorDistancePer);
+  }
+
   double tilePriority =
       computeTilePriority(tile, frameState.frustums, distances);
 
